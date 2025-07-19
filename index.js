@@ -1,11 +1,15 @@
 const express = require("express");
 const app = express();
-const PORT = 5000;
+require("dotenv").config();
+const cors = require("cors");
+const router = require("./router");
+const PORT = process.env.PORT;
 
-app.get("/", (req, res) => {
-  res.send("is it working.");
-});
+app.use(cors());
+app.use(express.json());
+
+app.use(router);
 
 app.listen(PORT, () => {
-  console.log("server is working");
+  console.log(`server is working ${PORT}`);
 });
