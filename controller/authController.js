@@ -30,7 +30,10 @@ const RegistrationController = async (req, res) => {
     res.status(201).send({
       success: true,
       message: "Registration successful",
+      data: user,
     });
+
+    res.save();
 
     res.send(user);
   } catch (error) {
@@ -38,4 +41,34 @@ const RegistrationController = async (req, res) => {
   }
 };
 
-module.exports = { RegistrationController };
+const loginController = async (req, res) => {
+  try {
+    const { email, password } = req.body;
+
+    if (!email || !password) {
+      return res.status(500).send({
+        success: false,
+        message: "Please provide all fields.",
+      });
+    }
+
+    const user = await userModel.findOne({ email });
+
+    if (!user) {
+      return res.status(404).send({
+        success: false,
+        message: "User is not found.",
+      });
+    }
+
+    res.status(200).send({
+      success: true,
+      message: "Login successful.",
+      data: user,
+    });
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+module.exports = { RegistrationController, loginController };
