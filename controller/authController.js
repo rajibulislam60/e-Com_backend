@@ -1,4 +1,5 @@
 const userModel = require("../models/userModel");
+const bcrypt = require("bcryptjs");
 
 const RegistrationController = async (req, res) => {
   try {
@@ -20,11 +21,15 @@ const RegistrationController = async (req, res) => {
       });
     }
 
+    const salt = bcrypt.genSaltSync(10);
+
+    const hashedPassword = await bcrypt.hash(password, salt);
+
     const user = await userModel.create({
       userName,
       email,
       phone,
-      password,
+      password: hashedPassword,
     });
 
     res.status(201).send({
@@ -32,10 +37,6 @@ const RegistrationController = async (req, res) => {
       message: "Registration successful",
       data: user,
     });
-
-    res.save();
-
-    res.send(user);
   } catch (error) {
     console.log(error);
   }
