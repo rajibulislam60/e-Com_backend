@@ -1,20 +1,34 @@
 const userModel = require("../models/userModel");
 
+const getAllUsersController = async (req, res) => {
+  try {
+    const users = await userModel.find().select("-password");
+
+    res.status(200).send({
+      success: true,
+      message: "All users fetched successfully.",
+      data: users,
+    });
+  } catch (error) {
+    console.log(error);
+  }
+};
+
 const getSingleUserController = async (req, res) => {
   try {
     const { id } = req.params;
 
-    const user = await userModel.findById(id);
+    const user = await userModel.findById(id).select("-password");
     if (!user) {
       return res.status(404).send({
         success: false,
-        massege: "User is not found",
+        message: "User is not found",
       });
     }
 
     res.status(200).send({
       success: true,
-      massege: "User get successfully.",
+      message: "User get successfully.",
       data: user,
     });
   } catch (error) {
@@ -22,4 +36,4 @@ const getSingleUserController = async (req, res) => {
   }
 };
 
-module.exports = { getSingleUserController };
+module.exports = { getAllUsersController, getSingleUserController };
