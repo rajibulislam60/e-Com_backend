@@ -36,4 +36,21 @@ const getSingleUserController = async (req, res) => {
   }
 };
 
-module.exports = { getAllUsersController, getSingleUserController };
+const userDeleteController = async (req, res) => {
+  try {
+    const deleteUser = await userModel.findByIdAndDelete(req.params.id);
+    return res.status(200).send({
+      success: true,
+      message: "Profile delete successfully",
+      data: deleteUser,
+    });
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+module.exports = {
+  getAllUsersController,
+  getSingleUserController,
+  userDeleteController,
+};
