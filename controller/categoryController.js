@@ -1,5 +1,7 @@
 const createCategoryController = async (req, res) => {
-  res.send("category is working");
+  let { name, image, description } = req.body;
+
+  res.send(req.body);
 };
 
 module.exports = { createCategoryController };
