@@ -7,6 +7,7 @@ const connectDB = require("./config/db");
 const PORT = process.env.PORT;
 
 app.use(cors());
+app.use(express.static("uploads"));
 app.use(express.json());
 
 connectDB();
