@@ -30,4 +30,8 @@ const createCategoryController = async (req, res) => {
   }
 };
 
-module.exports = { createCategoryController };
+const deleteCategoryController = async (req, res) => {
+  res.send("delete category is working")
+}
+
+module.exports = { createCategoryController, deleteCategoryController };

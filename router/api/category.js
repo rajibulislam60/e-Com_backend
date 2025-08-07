@@ -3,6 +3,7 @@ const multer = require("multer");
 
 const {
   createCategoryController,
+  deleteCategoryController,
 } = require("../../controller/categoryController");
 const router = express.Router();
 
@@ -35,5 +36,7 @@ router.post(
   errCheck,
   createCategoryController
 );
+
+router.delete("/deleteCategory", deleteCategoryController);
 
 module.exports = router;
