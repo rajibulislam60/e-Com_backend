@@ -1,4 +1,6 @@
+const path = require("path");
 const categoryModel = require("../models/categoryModel");
+const fs = require("fs");
 
 const createCategoryController = async (req, res) => {
   let { name, description } = req.body;
@@ -31,7 +33,29 @@ const createCategoryController = async (req, res) => {
 };
 
 const deleteCategoryController = async (req, res) => {
-  res.send("delete category is working")
-}
+  let { id } = req.params;
+  try {
+    let category = await categoryModel.findOneAndDelete({ _id: id });
+
+    let imagepath = category.image.split("/");
+    let oldimagepath = imagepath[imagepath.length - 1];
+    fs.unlink(
+      `${path.join(__dirname, "../uploads")}/${oldimagepath}`,
+      (err) => {
+        if (err) {
+          res.status(500).send({
+            success: false,
+            msg: `${err.message ? err.message : "Internal image server error"}`,
+            err,
+          });
+        } else {
+          res.send("image deleted");
+        }
+      }
+    );
+  } catch (error) {
+    console.log(error);
+  }
+};
 
 module.exports = { createCategoryController, deleteCategoryController };

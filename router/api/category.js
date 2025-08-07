@@ -37,6 +37,6 @@ router.post(
   createCategoryController
 );
 
-router.delete("/deleteCategory", deleteCategoryController);
+router.delete("/deleteCategory/:id", deleteCategoryController);
 
 module.exports = router;
