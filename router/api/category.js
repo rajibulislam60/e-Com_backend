@@ -4,6 +4,7 @@ const multer = require("multer");
 const {
   createCategoryController,
   deleteCategoryController,
+  updateCategoryController,
 } = require("../../controller/categoryController");
 const router = express.Router();
 
@@ -38,5 +39,11 @@ router.post(
 );
 
 router.delete("/deleteCategory/:id", deleteCategoryController);
+
+router.patch(
+  "/updateCategory/:id",
+  upload.single("image"),
+  updateCategoryController
+);
 
 module.exports = router;

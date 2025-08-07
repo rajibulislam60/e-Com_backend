@@ -58,4 +58,42 @@ const deleteCategoryController = async (req, res) => {
   }
 };
 
-module.exports = { createCategoryController, deleteCategoryController };
+const updateCategoryController = async (req, res) => {
+  const { id } = req.params;
+
+  let { name, description } = req.body;
+  const image = req.file;
+  const { filename } = image;
+
+  try {
+    let category = await categoryModel.findOneAndUpdate(
+      { _id: id },
+      { name, description, image: process.env.HOST_URL + req.file.filename }
+    );
+
+    let imagepath = category.image.split("/");
+    let oldimagepath = imagepath[imagepath.length - 1];
+    fs.unlink(
+      `${path.join(__dirname, "../uploads")}/${oldimagepath}`,
+      (err) => {
+        if (err) {
+          res.status(500).send({
+            success: false,
+            msg: `${err.message ? err.message : "Internal image server error"}`,
+            err,
+          });
+        } else {
+          res.send("Image Updated");
+        }
+      }
+    );
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+module.exports = {
+  createCategoryController,
+  deleteCategoryController,
+  updateCategoryController,
+};
