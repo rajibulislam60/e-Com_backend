@@ -105,9 +105,25 @@ const allCategoryController = async (req, res) => {
   }
 };
 
+const singleCategoryController = async (req, res) => {
+  let { id } = req.params;
+  try {
+    let singleCategory = await categoryModel.findById({ _id: id });
+
+    res.status(200).send({
+      success: true,
+      message: "Single category fatch successfully.",
+      data: singleCategory,
+    });
+  } catch (error) {
+    console.log(error);
+  }
+};
+
 module.exports = {
   createCategoryController,
   deleteCategoryController,
   updateCategoryController,
   allCategoryController,
+  singleCategoryController,
 };

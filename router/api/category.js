@@ -6,6 +6,7 @@ const {
   deleteCategoryController,
   updateCategoryController,
   allCategoryController,
+  singleCategoryController,
 } = require("../../controller/categoryController");
 const router = express.Router();
 
@@ -48,5 +49,7 @@ router.patch(
 );
 
 router.get("/allCategory", allCategoryController);
+
+router.get("/singleCategory/:id", singleCategoryController);
 
 module.exports = router;
