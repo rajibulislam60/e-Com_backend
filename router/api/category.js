@@ -5,6 +5,7 @@ const {
   createCategoryController,
   deleteCategoryController,
   updateCategoryController,
+  allCategoryController,
 } = require("../../controller/categoryController");
 const router = express.Router();
 
@@ -45,5 +46,7 @@ router.patch(
   upload.single("image"),
   updateCategoryController
 );
+
+router.get("/allCategory", allCategoryController);
 
 module.exports = router;

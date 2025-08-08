@@ -92,8 +92,22 @@ const updateCategoryController = async (req, res) => {
   }
 };
 
+const allCategoryController = async (req, res) => {
+  try {
+    let allCategory = await categoryModel.find({});
+    res.status(200).send({
+      success: true,
+      message: "All category fatch successfully.",
+      data: allCategory,
+    });
+  } catch (error) {
+    console.log(error);
+  }
+};
+
 module.exports = {
   createCategoryController,
   deleteCategoryController,
   updateCategoryController,
+  allCategoryController,
 };
