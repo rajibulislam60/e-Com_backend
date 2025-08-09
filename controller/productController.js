@@ -90,4 +90,21 @@ const deleteProductController = async (req, res) => {
   }
 };
 
-module.exports = { createProductsController, deleteProductController };
+
+const allProductsController =async (req, res)=>{
+  try {
+    let allProducts =await productModel.find({});
+
+    res.status(200).send({
+      success:true,
+      message:"All products fetch successfully.",
+      data:allProducts
+    })
+  } catch (error) {
+    console.log(error)
+  }
+}
+
+
+
+module.exports = { createProductsController, deleteProductController, allProductsController };
