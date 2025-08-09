@@ -31,7 +31,7 @@ const upload = multer({ storage: storage });
 
 router.post(
   "/createProducts",
-  upload.single("image"),
+  upload.array("image"),
   errCheck,
   createProductsController
 );

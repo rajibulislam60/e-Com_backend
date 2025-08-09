@@ -1,3 +1,4 @@
+const categoryModel = require("../models/categoryModel");
 const productModel = require("../models/productModel");
 
 const createProductsController = async (req, res) => {
@@ -33,6 +34,21 @@ const createProductsController = async (req, res) => {
     });
 
     await product.save();
+
+    const updateCategory = await categoryModel.findOneAndUpdate(
+      {
+        _id: category,
+      },
+      { $push: { products: product._id } },
+      { new: true }
+    );
+
+    if (!updateCategory) {
+      res.status(404).send({
+        success: false,
+        message: "Category is not found or update!",
+      });
+    }
 
     res.status(200).send({
       success: true,
