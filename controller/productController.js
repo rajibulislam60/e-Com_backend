@@ -1,5 +1,7 @@
+const path = require("path");
 const categoryModel = require("../models/categoryModel");
 const productModel = require("../models/productModel");
+const fs = require("fs");
 
 const createProductsController = async (req, res) => {
   try {
@@ -60,4 +62,32 @@ const createProductsController = async (req, res) => {
   }
 };
 
-module.exports = { createProductsController };
+const deleteProductController = async (req, res) => {
+  let { id } = req.params;
+  try {
+    let deleteproduct = await productModel.findOneAndDelete({ _id: id });
+    let imagepatharray = deleteproduct.image;
+
+    imagepatharray.forEach((item) => {
+      let imagepath = item.split("/");
+      let oldimagepath = imagepath[imagepath.length - 1];
+      fs.unlink(
+        `${path.join(__dirname, "../uploads")}/${oldimagepath}`,
+        (err) => {
+          if (err) {
+            console.error("Error deleting image:", err);
+          }
+        }
+      );
+    });
+    return res.status(200).json({
+      success: true,
+      msg: "product deleted successfull",
+      data: deleteproduct,
+    });
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+module.exports = { createProductsController, deleteProductController };

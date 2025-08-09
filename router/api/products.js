@@ -3,6 +3,7 @@ const multer = require("multer");
 
 const {
   createProductsController,
+  deleteProductController,
 } = require("../../controller/productController");
 const router = express.Router();
 
@@ -35,5 +36,7 @@ router.post(
   errCheck,
   createProductsController
 );
+
+router.delete("/deleteProduct/:id", deleteProductController);
 
 module.exports = router;
