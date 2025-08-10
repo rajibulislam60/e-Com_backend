@@ -90,21 +90,38 @@ const deleteProductController = async (req, res) => {
   }
 };
 
-
-const allProductsController =async (req, res)=>{
+const allProductsController = async (req, res) => {
   try {
-    let allProducts =await productModel.find({});
+    let allProducts = await productModel.find({});
 
     res.status(200).send({
-      success:true,
-      message:"All products fetch successfully.",
-      data:allProducts
-    })
+      success: true,
+      message: "All products fetch successfully.",
+      data: allProducts,
+    });
   } catch (error) {
-    console.log(error)
+    console.log(error);
   }
-}
+};
 
+const singleProductController = async (req, res) => {
+  let { id } = req.params;
 
+  try {
+    const singleProduct = await productModel.findById({ _id: id });
+    res.status(200).send({
+      success: true,
+      message: "Single product fatch successfully.",
+      data: singleProduct,
+    });
+  } catch (error) {
+    console.log(error);
+  }
+};
 
-module.exports = { createProductsController, deleteProductController, allProductsController };
+module.exports = {
+  createProductsController,
+  deleteProductController,
+  allProductsController,
+  singleProductController,
+};
