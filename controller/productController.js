@@ -119,9 +119,25 @@ const singleProductController = async (req, res) => {
   }
 };
 
+const byCategoryProductController = async (req, res) => {
+  let { id } = req.params;
+
+  try {
+    const products = await productModel.find({ category: id });
+    res.status(200).send({
+      success: true,
+      message: "By categroy products fatch successfully.",
+      data: products,
+    });
+  } catch (error) {
+    console.log(error);
+  }
+};
+
 module.exports = {
   createProductsController,
   deleteProductController,
   allProductsController,
   singleProductController,
+  byCategoryProductController,
 };
