@@ -48,16 +48,46 @@ const cartproductDeleteController = async (req, res) => {
       .populate("products");
     res.status(200).send({ msg: "Cart item delete done", data: cart });
   } catch (error) {
-    res.status(500).send({
-      success: false,
-      msg: `${error.message ? error.message : "Cart Product Delete error"}`,
-      error,
-    });
+    console.log(error);
   }
 };
+
+const cartproductIncrementController = async (req, res) => {
+  let { id } = req.params;
+  try {
+    const cart = await cartModel.findOne({ _id: id }).populate("products");
+
+    if (cart.products.stock > cart.quantity) {
+      cart.quantity++;
+      await cart.save();
+      res.status(200).send({ msg: "Cart quantity increment done", data: cart });
+    } else {
+      res.status(200).send({ msg: "Out of Stock" });
+    }
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+const cartproductDecrementController = async(req, res) => {
+  let { id } = req.params;
+
+  try {
+    const cart = await cartModel.findOne({ _id: id }).populate("products");
+    if (cart.quantity > 1) {
+      cart.quantity--;
+    }
+    await cart.save();
+    res.status(200).send({ msg: "Cart quantity decrement done", data: cart });
+  } catch (error) {
+    console.log(error);
+  }
+}
 
 module.exports = {
   addcartController,
   getSingleUserCartController,
   cartproductDeleteController,
+  cartproductIncrementController,
+  cartproductDecrementController
 };
