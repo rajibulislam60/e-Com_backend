@@ -40,4 +40,24 @@ const getSingleUserCartController = async (req, res) => {
   }
 };
 
-module.exports = { addcartController, getSingleUserCartController };
+const cartproductDeleteController = async (req, res) => {
+  let { id } = req.params;
+  try {
+    const cart = await cartModel
+      .findOneAndDelete({ _id: id })
+      .populate("products");
+    res.status(200).send({ msg: "Cart item delete done", data: cart });
+  } catch (error) {
+    res.status(500).send({
+      success: false,
+      msg: `${error.message ? error.message : "Cart Product Delete error"}`,
+      error,
+    });
+  }
+};
+
+module.exports = {
+  addcartController,
+  getSingleUserCartController,
+  cartproductDeleteController,
+};
