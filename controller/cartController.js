@@ -22,4 +22,22 @@ const addcartController = async (req, res) => {
   }
 };
 
-module.exports = { addcartController };
+const getSingleUserCartController = async (req, res) => {
+  let { userId } = req.params;
+
+  try {
+    let singleuserCart = await cartModel
+      .find({ user: userId })
+      .populate("products");
+
+    res.status(200).send({
+      success: true,
+      message: "Single user cart fatch successfully.",
+      data: singleuserCart,
+    });
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+module.exports = { addcartController, getSingleUserCartController };
