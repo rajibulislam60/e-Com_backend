@@ -1,25 +1,34 @@
-const addorderController = async (req, res) => {
-  let {
-    phone,
-    city,
-    address,
-    paymentmethod,
-    paymentStatus,
-    quantity,
-    productid,
-    cartItems,
-    totalprice,
-    user,
-  } = req.body;
+const orderModel = require("../models/orderModel");
 
+const addorderController = async (req, res) => {
   try {
+    let {
+      phone,
+      city,
+      address,
+      paymentmethod,
+      paymentStatus,
+      quantity,
+      productid,
+      cartItems,
+      totalprice,
+      user,
+    } = req.body;
+
+    if (!phone || !city || !address || !paymentmethod || !totalprice || !user) {
+      return res.status(400).json({
+        success: false,
+        msg: "Please fill all required fields",
+      });
+    }
+
     if (paymentmethod == "COD") {
       let order = new orderModel({
         phone,
         city,
         address,
         paymentmethod,
-        paymentStatus,
+        paymentStatus: paymentStatus || "Pending",
         quantity,
         productid,
         cartItems,
@@ -29,11 +38,31 @@ const addorderController = async (req, res) => {
       await order.save();
       res.status(201).json({
         success: true,
-        msg: "Order Successful",
+        msg: "Order placed Successful",
         data: order,
+      });
+    } else {
+      return res.status(400).json({
+        success: false,
+        msg: "Currently only COD is supported",
       });
     }
   } catch (error) {
     console.log(error);
   }
 };
+
+const getAllOrdersController = async (req, res) => {
+  try {
+    const orders = await orderModel.find().sort({ createdAt: -1 });
+    res.status(200).json({
+      success: true,
+      total: orders.length,
+      data: orders,
+    });
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+module.exports = { addorderController, getAllOrdersController };
