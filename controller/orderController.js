@@ -65,4 +65,29 @@ const getAllOrdersController = async (req, res) => {
   }
 };
 
-module.exports = { addorderController, getAllOrdersController };
+const getSingleOrderController = async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    const order = await orderModel.findById(id);
+    if (!order) {
+      return res.status(404).json({
+        success: false,
+        msg: "Order not found",
+      });
+    }
+
+    res.status(200).json({
+      success: true,
+      data: order,
+    });
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+module.exports = {
+  addorderController,
+  getAllOrdersController,
+  getSingleOrderController,
+};
