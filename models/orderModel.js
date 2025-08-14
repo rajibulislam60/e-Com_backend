@@ -30,6 +30,11 @@ let orderSchema = new Schema(
       type: String,
       enum: ["COD", "Online"],
     },
+    status: {
+      type: String,
+      enum: ["Pending", "Processing", "Shipped", "Delivered", "Canceled"],
+      default: "Pending",
+    },
     address: {
       type: String,
       required: true,
@@ -39,7 +44,7 @@ let orderSchema = new Schema(
       required: true,
     },
     phone: {
-      type: Number,
+      type: String,
       required: true,
     },
     trans_id: {

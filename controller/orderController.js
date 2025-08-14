@@ -8,6 +8,7 @@ const addorderController = async (req, res) => {
       address,
       paymentmethod,
       paymentStatus,
+      status,
       quantity,
       productid,
       cartItems,
@@ -29,6 +30,7 @@ const addorderController = async (req, res) => {
         address,
         paymentmethod,
         paymentStatus: paymentStatus || "Pending",
+        status,
         quantity,
         productid,
         cartItems,
@@ -86,8 +88,68 @@ const getSingleOrderController = async (req, res) => {
   }
 };
 
+const updateOrderController = async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    const updatedOrder = await orderModel.findByIdAndUpdate(id, req.body, {
+      new: true,
+      runValidators: true,
+    });
+
+    if (!updatedOrder) {
+      return res.status(404).json({
+        success: false,
+        msg: "Order not found",
+      });
+    }
+
+    res.status(200).json({
+      success: true,
+      msg: "Order updated successfully",
+      data: updatedOrder,
+    });
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+const cancelOrderController = async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    const order = await orderModel.findById(id);
+    if (!order) {
+      return res.status(404).json({
+        success: false,
+        msg: "Order not found",
+      });
+    }
+
+    if (order.status === "Delivered") {
+      return res.status(400).json({
+        success: false,
+        msg: "Delivered orders cannot be canceled",
+      });
+    }
+
+    order.status = "Canceled";
+    await order.save();
+
+    res.status(200).json({
+      success: true,
+      msg: "Order canceled successfully",
+      data: order,
+    });
+  } catch (error) {
+    console.log(error);
+  }
+};
+
 module.exports = {
   addorderController,
   getAllOrdersController,
   getSingleOrderController,
+  updateOrderController,
+  cancelOrderController,
 };
